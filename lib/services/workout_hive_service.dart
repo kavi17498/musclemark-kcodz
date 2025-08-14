@@ -19,7 +19,15 @@ class WorkoutHiveService {
 
   //update workout
   Future<Workout> updateWorkout(Workout workout) async {
-    _box.put(workout.id, workout);
+    // Find the key for this workout by searching through all values
+    final key = _box.keys.firstWhere(
+      (key) => _box.get(key)?.id == workout.id,
+      orElse: () => null,
+    );
+
+    if (key != null) {
+      await _box.put(key, workout);
+    }
     return workout;
   }
 }

@@ -9,7 +9,7 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/workout',
       name: 'workout',
-      builder: (context, state) => Selectworkout(),
+      builder: (context, state) => WorkoutScreen(),
     ),
   ],
 );
