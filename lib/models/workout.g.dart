@@ -20,19 +20,22 @@ class WorkoutAdapter extends TypeAdapter<Workout> {
       id: fields[0] as int,
       name: fields[1] as String,
       weightUsed: fields[2] as double,
+      type: fields[3] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, Workout obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
       ..write(obj.name)
       ..writeByte(2)
-      ..write(obj.weightUsed);
+      ..write(obj.weightUsed)
+      ..writeByte(3)
+      ..write(obj.type);
   }
 
   @override

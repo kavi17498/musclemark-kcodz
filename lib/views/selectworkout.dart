@@ -61,6 +61,7 @@ class WorkoutScreen extends ConsumerWidget {
       id: workout.id,
       name: workout.name,
       weightUsed: newWeight,
+      type: workout.type, // Assuming type is also part of the Workout model
     );
 
     // Update using the view model which should trigger UI refresh
@@ -70,6 +71,7 @@ class WorkoutScreen extends ConsumerWidget {
   void _showAddWorkoutDialog(BuildContext context, dynamic viewModel) {
     final nameController = TextEditingController();
     final weightController = TextEditingController();
+    final typeController = TextEditingController();
 
     showDialog(
       context: context,
@@ -95,6 +97,14 @@ class WorkoutScreen extends ConsumerWidget {
                 ),
                 keyboardType: TextInputType.number,
               ),
+              SizedBox(height: 16),
+              TextField(
+                controller: typeController,
+                decoration: InputDecoration(
+                  labelText: 'Workout Type',
+                  hintText: 'e.g., Strength, Cardio, etc.',
+                ),
+              ),
             ],
           ),
           actions: [
@@ -108,6 +118,7 @@ class WorkoutScreen extends ConsumerWidget {
               onPressed: () {
                 final name = nameController.text.trim();
                 final weightText = weightController.text.trim();
+                final type = typeController.text.trim();
 
                 if (name.isNotEmpty && weightText.isNotEmpty) {
                   final weight = double.tryParse(weightText) ?? 0.0;
@@ -115,6 +126,7 @@ class WorkoutScreen extends ConsumerWidget {
                     id: DateTime.now().millisecondsSinceEpoch,
                     name: name,
                     weightUsed: weight,
+                    type: type,
                   );
                   viewModel.addWorkout(newWorkout);
                   Navigator.of(context).pop();
