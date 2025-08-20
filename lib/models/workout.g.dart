@@ -20,7 +20,7 @@ class WorkoutAdapter extends TypeAdapter<Workout> {
       id: fields[0] as int,
       name: fields[1] as String,
       weightUsed: fields[2] as double,
-      type: fields[3] as String,
+      type: fields[3] as String?,
     );
   }
 

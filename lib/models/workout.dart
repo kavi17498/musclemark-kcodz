@@ -14,7 +14,7 @@ class Workout extends HiveObject {
   double weightUsed;
 
   @HiveField(3)
-  String type;
+  String? type;
 
   Workout({
     required this.id,
