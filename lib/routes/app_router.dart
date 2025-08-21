@@ -5,7 +5,7 @@ import 'package:musclemark/views/selectworkout.dart';
 final GoRouter appRouter = GoRouter(
   initialLocation: '/',
   routes: [
-    GoRoute(path: '/', name: 'home', builder: (context, state) => Home()),
+    GoRoute(path: '/', name: 'home', builder: (context, state) => home()),
     GoRoute(
       path: '/workout',
       name: 'workout',

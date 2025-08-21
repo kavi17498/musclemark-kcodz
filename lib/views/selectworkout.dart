@@ -4,6 +4,8 @@ import '../providers/workout_provider.dart';
 import 'package:flutter/material.dart';
 
 class WorkoutScreen extends ConsumerWidget {
+  const WorkoutScreen({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final workouts = ref.watch(workoutProvider);

@@ -1,9 +1,11 @@
-// ignore: file_names
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class Home extends StatelessWidget {
-  const Home({super.key});
+// ignore: camel_case_types
+class home extends StatelessWidget {
+  const home({super.key});
 
   @override
   Widget build(BuildContext context) {
