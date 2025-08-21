@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:musclemark/models/workout.dart';
 import '../providers/workout_provider.dart';
 import 'package:flutter/material.dart';
+import 'workout_log_screen.dart';
 
 class WorkoutScreen extends ConsumerWidget {
   const WorkoutScreen({super.key});
@@ -30,6 +31,13 @@ class WorkoutScreen extends ConsumerWidget {
                 ),
               ],
             ),
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => WorkoutLogScreen(workout: workout),
+                ),
+              );
+            },
             onLongPress: () {
               _showLongPressOptions(context, viewModel, workout);
             },

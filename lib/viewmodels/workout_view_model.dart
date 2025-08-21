@@ -24,7 +24,7 @@ class WorkoutViewModel extends Notifier<List<Workout>> {
     final currentWorkouts = List<Workout>.from(state);
     currentWorkouts.removeWhere((workout) => workout.id == id);
     state = currentWorkouts;
-    
+
     // Also delete from Hive storage
     await _service.deleteWorkout(id);
   }

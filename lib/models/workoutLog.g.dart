@@ -21,6 +21,7 @@ class WorkoutLogAdapter extends TypeAdapter<WorkoutLog> {
       weight: fields[1] as double,
       sets: fields[2] as int,
       reps: fields[3] as int,
+      workoutId: fields[4] as int,
     );
   }
 

@@ -17,10 +17,14 @@ class WorkoutLog extends HiveObject {
   @HiveField(3)
   int reps;
 
+  @HiveField(4)
+  int workoutId;
+
   WorkoutLog({
     required this.time,
     required this.weight,
     required this.sets,
     required this.reps,
+    required this.workoutId,
   });
 }
