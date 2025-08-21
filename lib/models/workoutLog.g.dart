@@ -1,47 +1,41 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'workout.dart';
+part of 'workoutLog.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class WorkoutAdapter extends TypeAdapter<Workout> {
+class WorkoutLogAdapter extends TypeAdapter<WorkoutLog> {
   @override
-  final int typeId = 0;
+  final int typeId = 1;
 
   @override
-  Workout read(BinaryReader reader) {
+  WorkoutLog read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Workout(
-      id: fields[0] as int,
-      name: fields[1] as String,
-      weightUsed: fields[2] as double,
-      type: fields[3] as String?,
-    )
-      ..incrementOptions = (fields[4] as List?)?.cast<double>()
-      ..workoutLogs = (fields[5] as List?)?.cast<WorkoutLog>();
+    return WorkoutLog(
+      time: fields[0] as DateTime?,
+      weight: fields[1] as double,
+      sets: fields[2] as int,
+      reps: fields[3] as int,
+    );
   }
 
   @override
-  void write(BinaryWriter writer, Workout obj) {
+  void write(BinaryWriter writer, WorkoutLog obj) {
     writer
-      ..writeByte(6)
-      ..writeByte(0)
-      ..write(obj.id)
-      ..writeByte(1)
-      ..write(obj.name)
-      ..writeByte(2)
-      ..write(obj.weightUsed)
-      ..writeByte(3)
-      ..write(obj.type)
       ..writeByte(4)
-      ..write(obj.incrementOptions)
-      ..writeByte(5)
-      ..write(obj.workoutLogs);
+      ..writeByte(0)
+      ..write(obj.time)
+      ..writeByte(1)
+      ..write(obj.weight)
+      ..writeByte(2)
+      ..write(obj.sets)
+      ..writeByte(3)
+      ..write(obj.reps);
   }
 
   @override
@@ -50,7 +44,7 @@ class WorkoutAdapter extends TypeAdapter<Workout> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is WorkoutAdapter &&
+      other is WorkoutLogAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

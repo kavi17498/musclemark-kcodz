@@ -1,4 +1,5 @@
 import 'package:hive/hive.dart';
+import 'package:musclemark/models/workoutLog.dart';
 
 part 'workout.g.dart';
 
@@ -15,6 +16,12 @@ class Workout extends HiveObject {
 
   @HiveField(3)
   String? type;
+
+  @HiveField(4)
+  List<double>? incrementOptions;
+
+  @HiveField(5)
+  List<WorkoutLog>? workoutLogs;
 
   Workout({
     required this.id,
