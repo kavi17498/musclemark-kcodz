@@ -30,8 +30,27 @@ class WorkoutScreen extends ConsumerWidget {
                 ),
               ],
             ),
+            onLongPress: () {
+              _showLongPressOptions(context, viewModel, workout);
+            },
             trailing: workout.type?.toLowerCase() == 'bodyweight'
-                ? SizedBox.shrink() // No weight controls for bodyweight
+                ? Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        icon: Icon(Icons.edit, color: Colors.blue),
+                        onPressed: () {
+                          _showEditWorkoutDialog(context, viewModel, workout);
+                        },
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.delete, color: Colors.red),
+                        onPressed: () {
+                          _showDeleteConfirmation(context, viewModel, workout);
+                        },
+                      ),
+                    ],
+                  )
                 : Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -163,6 +182,239 @@ class WorkoutScreen extends ConsumerWidget {
     } else {
       return (currentWeight - increment).clamp(0.0, double.infinity);
     }
+  }
+
+  void _showLongPressOptions(
+    BuildContext context,
+    dynamic viewModel,
+    Workout workout,
+  ) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Workout Options'),
+          content: Text('Choose an action for "${workout.name}":'),
+          actions: [
+            TextButton.icon(
+              icon: Icon(Icons.edit, color: Colors.blue),
+              label: Text('Edit'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                _showEditWorkoutDialog(context, viewModel, workout);
+              },
+            ),
+            TextButton.icon(
+              icon: Icon(Icons.delete, color: Colors.red),
+              label: Text('Delete'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                _showDeleteConfirmation(context, viewModel, workout);
+              },
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancel'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showDeleteConfirmation(
+    BuildContext context,
+    dynamic viewModel,
+    Workout workout,
+  ) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Delete Workout'),
+          content: Text('Are you sure you want to delete "${workout.name}"?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancel'),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+              onPressed: () {
+                viewModel.deleteWorkout(workout.id);
+                Navigator.of(context).pop();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('${workout.name} deleted'),
+                    backgroundColor: Colors.green,
+                  ),
+                );
+              },
+              child: Text('Delete', style: TextStyle(color: Colors.white)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showEditWorkoutDialog(
+    BuildContext context,
+    dynamic viewModel,
+    Workout workout,
+  ) {
+    final nameController = TextEditingController(text: workout.name);
+    final weightController = TextEditingController(
+      text: workout.type?.toLowerCase() == 'bodyweight'
+          ? ''
+          : workout.weightUsed.toString(),
+    );
+    String selectedType = workout.type ?? 'Dumbbell';
+
+    final workoutTypes = [
+      'Dumbbell',
+      'Barbell',
+      'Plates',
+      'Machine',
+      'Cable',
+      'Bodyweight',
+    ];
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: Text('Edit Workout'),
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextField(
+                      controller: nameController,
+                      decoration: InputDecoration(
+                        labelText: 'Workout Name',
+                        hintText: 'e.g., Push Ups, Bench Press, etc.',
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    SizedBox(height: 16),
+                    DropdownButtonFormField<String>(
+                      value: workoutTypes.contains(selectedType)
+                          ? selectedType
+                          : 'Dumbbell',
+                      decoration: InputDecoration(
+                        labelText: 'Workout Type',
+                        border: OutlineInputBorder(),
+                      ),
+                      items: workoutTypes.map((type) {
+                        return DropdownMenuItem(value: type, child: Text(type));
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          selectedType = value!;
+                          if (selectedType == 'Bodyweight') {
+                            weightController.clear();
+                          }
+                        });
+                      },
+                    ),
+                    SizedBox(height: 16),
+                    TextField(
+                      controller: weightController,
+                      decoration: InputDecoration(
+                        labelText: selectedType == 'Bodyweight'
+                            ? 'Weight (optional)'
+                            : 'Weight (kg)',
+                        hintText: selectedType == 'Bodyweight'
+                            ? 'Leave empty for bodyweight'
+                            : 'Enter weight',
+                        border: OutlineInputBorder(),
+                        suffixText: selectedType == 'Bodyweight' ? '' : 'kg',
+                      ),
+                      keyboardType: TextInputType.number,
+                      enabled: selectedType != 'Bodyweight',
+                    ),
+                    if (selectedType != 'Bodyweight') ...[
+                      SizedBox(height: 12),
+                      Container(
+                        padding: EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: Colors.blue.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Column(
+                          children: [
+                            Text(
+                              'Weight Progression Info:',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(height: 4),
+                            Text(
+                              _getProgressionInfo(selectedType),
+                              style: TextStyle(fontSize: 12),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Cancel'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    final name = nameController.text.trim();
+                    final weightText = weightController.text.trim();
+
+                    if (name.isNotEmpty) {
+                      final weight = selectedType == 'Bodyweight'
+                          ? 0.0
+                          : (double.tryParse(weightText) ?? 0.0);
+
+                      final updatedWorkout = Workout(
+                        id: workout.id,
+                        name: name,
+                        weightUsed: weight,
+                        type: selectedType,
+                      );
+                      viewModel.updateWorkout(updatedWorkout);
+                      Navigator.of(context).pop();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('${name} updated'),
+                          backgroundColor: Colors.green,
+                        ),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Please enter a workout name'),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
+                  },
+                  child: Text('Update'),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
   }
 
   void _showAddWorkoutDialog(BuildContext context, dynamic viewModel) {
