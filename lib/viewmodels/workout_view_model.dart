@@ -20,8 +20,13 @@ class WorkoutViewModel extends Notifier<List<Workout>> {
   }
 
   Future<void> deleteWorkout(int id) async {
+    // Update the state immediately for real-time UI update
+    final currentWorkouts = List<Workout>.from(state);
+    currentWorkouts.removeWhere((workout) => workout.id == id);
+    state = currentWorkouts;
+    
+    // Also delete from Hive storage
     await _service.deleteWorkout(id);
-    refresh();
   }
 
   Future<void> updateWorkout(Workout workout) async {
