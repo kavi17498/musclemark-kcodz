@@ -14,7 +14,15 @@ class WorkoutHiveService {
 
   //delete workout
   Future<void> deleteWorkout(int id) async {
-    _box.delete(id);
+    // Find the key for this workout by searching through all values
+    final key = _box.keys.firstWhere(
+      (key) => _box.get(key)?.id == id,
+      orElse: () => null,
+    );
+
+    if (key != null) {
+      await _box.delete(key);
+    }
   }
 
   //update workout

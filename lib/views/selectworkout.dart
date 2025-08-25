@@ -252,8 +252,8 @@ class WorkoutScreen extends ConsumerWidget {
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-              onPressed: () {
-                viewModel.deleteWorkout(workout.id);
+              onPressed: () async {
+                await viewModel.deleteWorkout(workout.id);
                 Navigator.of(context).pop();
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(

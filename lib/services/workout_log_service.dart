@@ -10,7 +10,10 @@ class WorkoutLogService {
   // Get logs for a specific workout ID
   List<WorkoutLog> getWorkoutLogs(int workoutId) {
     return _box.values.where((log) => log.workoutId == workoutId).toList()
-      ..sort((a, b) => (b.time ?? DateTime.now()).compareTo(a.time ?? DateTime.now()));
+      ..sort(
+        (a, b) =>
+            (b.time ?? DateTime.now()).compareTo(a.time ?? DateTime.now()),
+      );
   }
 
   // Add workout log
@@ -37,7 +40,7 @@ class WorkoutLogService {
         keysToDelete.add(key);
       }
     }
-    
+
     for (final key in keysToDelete) {
       await _box.delete(key);
     }

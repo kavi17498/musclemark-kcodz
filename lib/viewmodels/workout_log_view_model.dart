@@ -24,7 +24,9 @@ class WorkoutLogViewModel extends Notifier<List<WorkoutLog>> {
     // Add to state immediately for real-time UI update
     final currentLogs = List<WorkoutLog>.from(state);
     currentLogs.add(log);
-    currentLogs.sort((a, b) => (b.time ?? DateTime.now()).compareTo(a.time ?? DateTime.now()));
+    currentLogs.sort(
+      (a, b) => (b.time ?? DateTime.now()).compareTo(a.time ?? DateTime.now()),
+    );
     state = currentLogs;
 
     // Save to storage
@@ -52,15 +54,15 @@ class WorkoutLogViewModel extends Notifier<List<WorkoutLog>> {
     final logs = state;
     final totalSessions = logs.length;
     final totalVolume = logs.fold<double>(
-      0, 
+      0,
       (sum, log) => sum + (log.sets * log.reps * log.weight),
     );
-    final averageWeight = logs.fold<double>(
-      0, 
-      (sum, log) => sum + log.weight,
-    ) / totalSessions;
-    
-    final maxWeight = logs.map((log) => log.weight).reduce((a, b) => a > b ? a : b);
+    final averageWeight =
+        logs.fold<double>(0, (sum, log) => sum + log.weight) / totalSessions;
+
+    final maxWeight = logs
+        .map((log) => log.weight)
+        .reduce((a, b) => a > b ? a : b);
     final lastWeight = logs.isNotEmpty ? logs.first.weight : 0.0;
 
     return {
@@ -75,24 +77,28 @@ class WorkoutLogViewModel extends Notifier<List<WorkoutLog>> {
 
   String _calculateProgressTrend() {
     if (state.length < 2) return 'insufficient_data';
-    
+
     final recent = state.take(3).toList();
     final older = state.skip(3).take(3).toList();
-    
+
     if (older.isEmpty) return 'insufficient_data';
-    
-    final recentAvg = recent.fold<double>(
-      0, 
-      (sum, log) => sum + (log.sets * log.reps * log.weight),
-    ) / recent.length;
-    
-    final olderAvg = older.fold<double>(
-      0, 
-      (sum, log) => sum + (log.sets * log.reps * log.weight),
-    ) / older.length;
-    
+
+    final recentAvg =
+        recent.fold<double>(
+          0,
+          (sum, log) => sum + (log.sets * log.reps * log.weight),
+        ) /
+        recent.length;
+
+    final olderAvg =
+        older.fold<double>(
+          0,
+          (sum, log) => sum + (log.sets * log.reps * log.weight),
+        ) /
+        older.length;
+
     final improvement = ((recentAvg - olderAvg) / olderAvg) * 100;
-    
+
     if (improvement > 5) return 'improving';
     if (improvement < -5) return 'declining';
     return 'stable';

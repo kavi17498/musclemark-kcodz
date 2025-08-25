@@ -21,7 +21,7 @@ void main() async {
     // If there's an error opening boxes (usually due to data structure changes),
     // delete the old data and recreate the boxes
     print('Error opening Hive boxes, clearing old data: $e');
-    
+
     // Delete the Hive directory to clear all old data
     try {
       await Hive.deleteBoxFromDisk('workouts');
@@ -29,7 +29,7 @@ void main() async {
     } catch (deleteError) {
       print('Error deleting old boxes: $deleteError');
     }
-    
+
     // Reopen the boxes
     await Hive.openBox<Workout>('workouts');
     await Hive.openBox<WorkoutLog>('workoutLogs');
