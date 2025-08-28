@@ -10,11 +10,23 @@ class home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () => context.go('/workout'),
-          child: const Text('Select Workout'),
-        ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Center(
+            child: ElevatedButton(
+              onPressed: () => context.go('/workout'),
+              child: const Text('Select Workout'),
+            ),
+          ),
+          SizedBox(height: 10),
+          Center(
+            child: ElevatedButton(
+              onPressed: () => context.go('/bmi'),
+              child: const Text('BMI Calculator'),
+            ),
+          ),
+        ],
       ),
     );
   }

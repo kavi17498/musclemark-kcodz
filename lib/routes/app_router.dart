@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:musclemark/views/BmiView.dart';
 import 'package:musclemark/views/Home.dart';
 import 'package:musclemark/views/selectworkout.dart';
 
@@ -11,5 +12,6 @@ final GoRouter appRouter = GoRouter(
       name: 'workout',
       builder: (context, state) => WorkoutScreen(),
     ),
+    GoRoute(path: '/bmi', name: 'bmi', builder: (context, state) => Bmiview()),
   ],
 );
